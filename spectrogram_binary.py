@@ -59,7 +59,7 @@ def get_spectrogram(data):
     fig,ax = plt.subplots(1)
     fig.subplots_adjust(left=0,right=1,bottom=0,top=1)
     ax.axis('off')
-    pxx, freqs, bins, im = ax.specgram(x=data, Fs=rate, noverlap=noverlap, NFFT=nfft)
+    pxx, freqs, bins, im = ax.specgram(x=data, Fs=rate, noverlap=noverlap, NFFT=nfft, cmap="viridis")
     ax.axis('off')
     plt.rcParams['figure.figsize'] = [0.75,0.5]
     fig.canvas.draw()

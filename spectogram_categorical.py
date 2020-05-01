@@ -79,13 +79,13 @@ def preprocess_data():
     Y = []
     for uid in dataset:
         spectrogram = get_spectrogram(dataset[uid]["x"])
-        graygram      = rgb2gray(spectrogram)
-        normgram      = normalize_gray(graygram)
+        #graygram      = rgb2gray(spectrogram)
+        normgram      = normalize_gray(spectrogram)
             
         X.append(normgram)
         Y.append(dataset[uid]["y"]-1)
         
-    X = np.array(X)
+    X = np.array(X, dtype="float32")
     Y = np.array(Y)
     
     Y = keras.utils.to_categorical(Y, 5)
@@ -93,12 +93,13 @@ def preprocess_data():
     
 
 if __name__ == "__main__":
+    
     X, Y = preprocess_data()
     imheight, imwidth = (36, 54)
     x_train, x_test, y_train, y_test = train_test_split(X, Y, test_size=0.2, random_state=0)
-    x_train = x_train.reshape(x_train.shape[0], imheight, imwidth, 1)
-    x_test = x_test.reshape(x_test.shape[0], imheight, imwidth, 1)
-    input_shape = (imheight, imwidth, 1)
+    #x_train = x_train.reshape(x_train.shape[0], imheight, imwidth, 1)
+    #x_test = x_test.reshape(x_test.shape[0], imheight, imwidth, 1)
+    input_shape = (imheight, imwidth, 3)
 
     model = Sequential()
     model.add(Conv2D(32, kernel_size=(3, 3), activation='relu', input_shape=input_shape))
@@ -113,7 +114,7 @@ if __name__ == "__main__":
     model.compile(loss="categorical_crossentropy", optimizer="adam", metrics=['accuracy'])
     print(model.summary())
 
-    model.fit(x_train, y_train, batch_size=4, epochs=50, verbose=1, validation_data=(x_test, y_test), callbacks=[ModelCheckpoint('model_categorical.h5',save_best_only=True)])
+    model.fit(x_train, y_train, batch_size=4, epochs=50, verbose=1, validation_data=(x_test, y_test), callbacks=[ModelCheckpoint('model_categorical_3_channel.h5',save_best_only=True)])
     
 # -*- coding: utf-8 -*-
 
