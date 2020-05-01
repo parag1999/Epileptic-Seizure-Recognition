@@ -6,19 +6,13 @@ from keras.layers.convolutional import Conv2D
 from keras.layers.pooling import MaxPooling2D
 from keras.layers.core import Dropout ,Flatten , Dense
 from keras.callbacks import ModelCheckpoint
-#from scipy import signal
+from keras.layers import BatchNormalization
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 import numpy as np
 import re
 import os
 from lspopt import spectrogram_lspopt
-# Scipy signal spectogram
-#f, t, Sxx = signal.spectrogram(dataset["164"]["x"], 178)
-#plt.pcolormesh(t, f, Sxx)
-#plt.ylabel('Frequency [Hz]')
-#plt.xlabel('Time [sec]')
-#plt.savefig('foo_scipy_signal_spectogram.png')
 
 
 def order_data(path):
@@ -111,7 +105,9 @@ if __name__ == "__main__":
 
     model = Sequential()
     model.add(Conv2D(32, kernel_size=(3, 3), activation='relu', input_shape=input_shape))
+    model.add(BatchNormalization())
     model.add(Conv2D(64, kernel_size=(3, 3), activation='relu'))
+    model.add(BatchNormalization())
     model.add(MaxPooling2D(pool_size=(2, 2)))
     model.add(Dropout(0.25))
     model.add(Flatten())
